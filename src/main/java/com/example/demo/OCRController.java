@@ -29,7 +29,12 @@ public class OCRController {
     }
 
     @PostMapping("/extract-text-from-pdf")
-    public void extractTextFromPDF(@RequestParam("pdfPath") String pdfPath, @RequestParam("outPath") String outPath) {
-        textExtractor.extractAndSaveTextFromPDF(pdfPath, outPath);
+    public String extractTextFromPDF(@RequestParam("pdfPath") String pdfPath) {
+        return textExtractor.extractTextFromPDF(pdfPath);
+    }
+
+    @PostMapping("/extract-text-from-pdf-save")
+    public String extractTextFromPDF(@RequestParam("pdfPath") String pdfPath, @RequestParam("outPath") String outPath) {
+        return textExtractor.extractTextFromPDF(pdfPath, outPath);
     }
 }
