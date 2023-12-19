@@ -3,8 +3,14 @@ package com.example.demo;
 import net.sourceforge.tess4j.ITesseract;
 import net.sourceforge.tess4j.Tesseract;
 import net.sourceforge.tess4j.TesseractException;
+import org.apache.pdfbox.Loader;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.rendering.ImageType;
+import org.apache.pdfbox.rendering.PDFRenderer;
 import org.springframework.stereotype.Component;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -49,9 +55,27 @@ public class TextExtractor {
         try {
             return tess.doOCR(new File(imagePath));
         } catch (TesseractException e) {
-            // Замени e.printStackTrace() на логирование
             System.err.println("Ошибка при обработке изображения: " + e.getMessage());
             return "Ошибка при обработке изображения";
+        }
+    }
+
+    public void extractAndSaveTextFromPDF(String pdfPath, String outputPath) {
+        try {
+            PDDocument document = Loader.loadPDF(new File(pdfPath));
+            PDFRenderer pdfRenderer = new PDFRenderer(document);
+
+            for (int page = 0; page < document.getNumberOfPages(); ++page) {
+                BufferedImage bim = pdfRenderer.renderImageWithDPI(page, 300, ImageType.RGB);
+                String imagePath = outputPath + "/page_" + (page + 1) + ".png";
+                ImageIO.write(bim, "png", new File(imagePath));
+                String extractedText = tess.doOCR(new File(imagePath));
+                writeTextToFile(extractedText, outputPath + "/text_page_" + (page + 1) + ".txt");
+            }
+
+            document.close();
+        } catch (IOException | TesseractException e) {
+            System.err.println("Ошибка при обработке PDF: " + e.getMessage());
         }
     }
 }

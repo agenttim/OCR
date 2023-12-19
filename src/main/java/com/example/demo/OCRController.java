@@ -27,4 +27,9 @@ public class OCRController {
     public String extractText(@RequestParam("imagePath") String imagePath) {
         return textExtractor.extractText(imagePath);
     }
+
+    @PostMapping("/extract-text-from-pdf")
+    public void extractTextFromPDF(@RequestParam("pdfPath") String pdfPath, @RequestParam("outPath") String outPath) {
+        textExtractor.extractAndSaveTextFromPDF(pdfPath, outPath);
+    }
 }
