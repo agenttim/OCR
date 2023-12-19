@@ -16,10 +16,15 @@ public class OCRController {
         this.textExtractor = textExtractor;
     }
 
-    @PostMapping("/extract-text")
+    @PostMapping("/extract-save-text")
     public String extractTextAndSave(@RequestParam("imagePath") String imagePath,
                                      @RequestParam("outputPath") String outputPath) {
         textExtractor.extractAndSaveText(imagePath, outputPath);
         return "Результат успешно записан в файл: " + outputPath;
+    }
+
+    @PostMapping("/extract-text")
+    public String extractText(@RequestParam("imagePath") String imagePath) {
+        return textExtractor.extractText(imagePath);
     }
 }
