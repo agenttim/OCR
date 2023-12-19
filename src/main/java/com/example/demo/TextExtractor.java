@@ -17,8 +17,10 @@ public class TextExtractor {
     public TextExtractor() {
         this.tess = new Tesseract();
         tess.setLanguage("rus");
-        tess.setTessVariable("textord_tabfind_find_tables", "1");
-        tess.setTessVariable("textord_tabfind_vertical_text", "1");
+
+        tess.setPageSegMode(1);
+
+
         // Здесь ты можешь задать дополнительные настройки Tess4J, если необходимо
 
 
