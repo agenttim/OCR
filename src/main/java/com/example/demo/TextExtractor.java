@@ -32,6 +32,8 @@ public class TextExtractor {
         this.tess = new Tesseract();
         tess.setLanguage("rus+eng");
         tess.setPageSegMode(1);
+        tess.setOcrEngineMode(1);
+
     }
 
     public void extractAndSaveText(String imagePath, String outputPath) {
@@ -89,7 +91,7 @@ public class TextExtractor {
             List<String> results = new ArrayList<>();
 
             for (int page = 0; page < document.getNumberOfPages(); ++page) {
-                BufferedImage bim = pdfRenderer.renderImageWithDPI(page, 300, ImageType.RGB);
+                BufferedImage bim = pdfRenderer.renderImageWithDPI(page, 600, ImageType.BINARY);
                 String imagePath = cachePath + "/page_" + (page + 1) + ".png";
                 ImageIO.write(bim, "png", new File(imagePath));
                 String extractedText = tess.doOCR(bim);
